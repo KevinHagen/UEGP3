@@ -101,6 +101,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9051706688429314664}
+  - component: {fileID: 2442883177763884725}
+  - component: {fileID: 839982847}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -124,6 +126,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &2442883177763884725
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3372320169218240956}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &839982847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3372320169218240956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e9b9736c214144989a0342a0fff687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementSpeed: 10
+  _graphicsObject: {fileID: 3063458037248281072}
 --- !u!1001 &7706445319817918617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,7 +225,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPrototypeModell
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5851925646276115543, guid: 3b5f90c315abf764abcd111175df7502, type: 3}
+    - {fileID: 8520404379518852398, guid: 3b5f90c315abf764abcd111175df7502, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3b5f90c315abf764abcd111175df7502, type: 3}
 --- !u!4 &6256007877034045633 stripped
 Transform:
