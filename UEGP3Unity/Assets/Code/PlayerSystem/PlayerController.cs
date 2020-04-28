@@ -12,6 +12,11 @@ namespace UEGP3.PlayerSystem
 		private Transform _graphicsObject = null;
 		[Tooltip("Reference to the game camera")] [SerializeField]
 		private Transform _cameraTransform = null;
+
+		[Header("Movement")] [Tooltip("Smoothing time for turns")] [SerializeField]
+		private float _turnSmoothTime = 0.15f;
+		[Tooltip("Smoothing time to reach target speed")] [SerializeField]
+		private float _speedSmoothTime = 0.7f;
 		[Tooltip("Modifier that manipulates the gravity set in Unitys Physics settings")] [SerializeField]
 		private float _gravityModifier = 1.0f;
 		[Tooltip("Maximum falling velocity the player can reach")] [Range(1f, 15f)] [SerializeField]
@@ -28,6 +33,8 @@ namespace UEGP3.PlayerSystem
 
 		private bool _isGrounded;
 		private float _currentVerticalVelocity;
+		private float _currentForwardVelocity;
+		private float _speedSmoothVelocity;
 		private CharacterController _characterController;
 		
 		private void Awake()
@@ -51,7 +58,8 @@ namespace UEGP3.PlayerSystem
 			if (direction != Vector3.zero)
 			{
 				float lookRotationAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _cameraTransform.eulerAngles.y;
-				_graphicsObject.rotation = Quaternion.Euler(0, lookRotationAngle, 0);
+				Quaternion targetRotation = Quaternion.Euler(0, lookRotationAngle, 0);
+				_graphicsObject.rotation = Quaternion.Slerp(_graphicsObject.rotation, targetRotation, _turnSmoothTime);
 			}
 
 			// Calculate velocity based on gravity formula: delta-y = 1/2 * g * t^2
@@ -64,7 +72,9 @@ namespace UEGP3.PlayerSystem
 
 			// Calculate velocity vector based on gravity and speed
 			// (0, 0, z) -> (0, y, z)
-			Vector3 velocity = _graphicsObject.forward * (_movementSpeed * direction.magnitude) + Vector3.up * _currentVerticalVelocity;
+			float targetSpeed = (_movementSpeed * direction.magnitude);
+			_currentForwardVelocity = Mathf.SmoothDamp(_currentForwardVelocity, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
+			Vector3 velocity = _graphicsObject.forward * _currentForwardVelocity + Vector3.up * _currentVerticalVelocity;
 			
 			// Use the direction to move the character controller
 			// direction.x * Time.deltaTime, direction.y * Time.deltaTime, ... -> resultingDirection.x * _movementSpeed
