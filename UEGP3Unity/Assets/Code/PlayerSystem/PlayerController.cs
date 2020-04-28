@@ -10,8 +10,10 @@ namespace UEGP3.PlayerSystem
 		private float _movementSpeed = 10f;
 		[Tooltip("The graphical represenation of the character. It is used for things like rotation")] [SerializeField]
 		private Transform _graphicsObject = null;
-		
-		
+		[Tooltip("Reference to the game camera")] [SerializeField]
+		private Transform _cameraTransform = null;
+
+
 		private CharacterController _characterController;
 		
 		private void Awake()
@@ -33,7 +35,7 @@ namespace UEGP3.PlayerSystem
 			// If the player has given any input, adjust the character rotation
 			if (direction != Vector3.zero)
 			{
-				float lookRotationAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+				float lookRotationAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _cameraTransform.eulerAngles.y;
 				_graphicsObject.rotation = Quaternion.Euler(0, lookRotationAngle, 0);
 			}
 
