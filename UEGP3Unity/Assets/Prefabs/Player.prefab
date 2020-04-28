@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1526858313}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Logic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,6 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2019451242}
+  - {fileID: 7041014016371524974}
   m_Father: {fileID: 9051706688429314664}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -40,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2019451242}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CameraPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,6 +62,36 @@ Transform:
   m_Father: {fileID: 1526858313}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1357847965706896704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7041014016371524974}
+  m_Layer: 9
+  m_Name: GroundCheckTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7041014016371524974
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357847965706896704}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.959, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1526858313}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2865682011118033230
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,7 +101,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3063458037248281072}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerGraphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +134,7 @@ GameObject:
   - component: {fileID: 9051706688429314664}
   - component: {fileID: 2442883177763884725}
   - component: {fileID: 839982847}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,6 +189,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 10
   _graphicsObject: {fileID: 3063458037248281072}
+  _cameraTransform: {fileID: 0}
+  _gravityModifier: 1
+  _groundCheckTransform: {fileID: 7041014016371524974}
+  _groundCheckRadius: 0.2
+  _groundCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1001 &7706445319817918617
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,6 +203,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3063458037248281072}
     m_Modifications:
+    - target: {fileID: 89094205284146, guid: 3b5f90c315abf764abcd111175df7502, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4333312990278256728, guid: 3b5f90c315abf764abcd111175df7502,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -224,6 +266,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlayerPrototypeModell
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228793410303642421, guid: 3b5f90c315abf764abcd111175df7502,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5851925646276115543, guid: 3b5f90c315abf764abcd111175df7502, type: 3}

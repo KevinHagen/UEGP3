@@ -12,8 +12,22 @@ namespace UEGP3.PlayerSystem
 		private Transform _graphicsObject = null;
 		[Tooltip("Reference to the game camera")] [SerializeField]
 		private Transform _cameraTransform = null;
+		[Tooltip("Modifier that manipulates the gravity set in Unitys Physics settings")] [SerializeField]
+		private float _gravityModifier = 1.0f;
+		[Tooltip("Maximum falling velocity the player can reach")] [Range(1f, 15f)] [SerializeField]
+		private float _terminalVelocity = 10f;
+		[Tooltip("The height in meters the cahracter can jump")] [SerializeField]
+		private float _jumpHeight;
+		
+		[Header("Ground Check")] [Tooltip("A transform used to detect the ground")] [SerializeField]
+		private Transform _groundCheckTransform = null;
+		[Tooltip("The radius around transform which is used to detect the ground")] [SerializeField]
+		private float _groundCheckRadius = 0.1f;
+		[Tooltip("A layermask used to exclude/include certain layers from the \"ground\"")] [SerializeField]
+		private LayerMask _groundCheckLayerMask = default;
 
-
+		private bool _isGrounded;
+		private float _currentVerticalVelocity;
 		private CharacterController _characterController;
 		
 		private void Awake()
@@ -28,6 +42,7 @@ namespace UEGP3.PlayerSystem
 			// GetAxis: [-1, +1]
 			float horizontalInput = Input.GetAxisRaw("Horizontal");
 			float verticalInput = Input.GetAxisRaw("Vertical");
+			bool jumpDown = Input.GetButtonDown("Jump");
 
 			// Calculate a direction from input data 
 			Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
@@ -39,10 +54,37 @@ namespace UEGP3.PlayerSystem
 				_graphicsObject.rotation = Quaternion.Euler(0, lookRotationAngle, 0);
 			}
 
+			// Calculate velocity based on gravity formula: delta-y = 1/2 * g * t^2
+			// We ignore the 1/2 to safe multiplications and because it feels better.
+			// Second Time.deltaTime is done in controller.Move()-call so we save one multiplication here.
+			_currentVerticalVelocity += Physics.gravity.y * _gravityModifier * Time.deltaTime;
+			
+			// Clamp velocity to reach no more than our defined terminal velocity
+			_currentVerticalVelocity = Mathf.Clamp(_currentVerticalVelocity, -_terminalVelocity, _jumpHeight);
+
+			// Calculate velocity vector based on gravity and speed
+			// (0, 0, z) -> (0, y, z)
+			Vector3 velocity = _graphicsObject.forward * (_movementSpeed * direction.magnitude) + Vector3.up * _currentVerticalVelocity;
+			
 			// Use the direction to move the character controller
 			// direction.x * Time.deltaTime, direction.y * Time.deltaTime, ... -> resultingDirection.x * _movementSpeed
 			// Time.deltaTime * _movementSpeed = res, res * direction.x, res * direction.y, ...
-			_characterController.Move(_graphicsObject.forward * (Time.deltaTime * _movementSpeed * direction.magnitude));
+			_characterController.Move(velocity * Time.deltaTime);
+			
+			// Check if we are grounded, if so reset gravity
+			_isGrounded = Physics.CheckSphere(_groundCheckTransform.position, _groundCheckRadius, _groundCheckLayerMask);
+			if (_isGrounded)
+			{
+				// Reset current vertical velocity
+				_currentVerticalVelocity = 0f;
+			}
+
+			// If we are grounded and jump was pressed, jump
+			if (_isGrounded && jumpDown)
+			{
+				// Use formula: Mathf.Sqrt(h * (-2) * g)
+				_currentVerticalVelocity = Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
+			}
 		}
 	}
 }
