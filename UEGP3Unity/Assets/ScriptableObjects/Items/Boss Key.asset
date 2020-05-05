@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e229c29e3549b7bbd2b4c063b2b2bb, type: 3}
   m_Name: Boss Key
   m_EditorClassIdentifier: 
-  _itemName: 
-  _description: 
+  _itemName: Epic boss key
+  _description: A boss key you retrieved after an epic battle with huge monsters.
   _itemSprite: {fileID: 0}
   _consumeUponUse: 0
-  _isUnique: 0
+  _isUnique: 1
