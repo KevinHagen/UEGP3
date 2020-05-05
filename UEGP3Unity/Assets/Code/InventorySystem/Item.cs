@@ -2,11 +2,10 @@
 
 namespace UEGP3.InventorySystem
 {
-	[CreateAssetMenu(fileName = "New Item", menuName = "UEGP3/Inventory System/New Item")]
-	public class Item : ScriptableObject
+	public abstract class Item : ScriptableObject
 	{
 		[Tooltip("The name of the item")] [SerializeField]
-		private string _itemName;
+		protected string _itemName;
 		[Tooltip("Short description of the item, shown to the player")] [SerializeField]
 		private string _description;
 		[Tooltip("A small icon of the item")] [SerializeField]
@@ -44,14 +43,12 @@ namespace UEGP3.InventorySystem
 		
 		// public getter only - "readonly"
 		public bool IsUnique => _isUnique;
+		public bool ConsumeUponUse => _consumeUponUse;
 		public string ItemName => _itemName;
 
 		/// <summary>
 		/// Uses the item and executes its effect.
 		/// </summary>
-		public void UseItem()
-		{
-			Debug.Log($"Using item {_itemName}");
-		}
+		public abstract void UseItem();
 	}
 }

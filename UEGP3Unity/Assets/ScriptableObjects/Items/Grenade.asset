@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10e229c29e3549b7bbd2b4c063b2b2bb, type: 3}
-  m_Name: Health Potion
+  m_Script: {fileID: 11500000, guid: 807bd0318bc34fbdb9e0760a95c19304, type: 3}
+  m_Name: Grenade
   m_EditorClassIdentifier: 
-  _itemName: Small Health Potion
-  _description: Restores 10% HP of the player.
+  _itemName: Grenade
+  _description: Inflicts a huge amount of damage
   _itemSprite: {fileID: 0}
   _consumeUponUse: 1
   _isUnique: 0
+  _damage: 5
