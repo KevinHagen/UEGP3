@@ -501,6 +501,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemPickupPotion (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7213640105187428585, guid: 3efe59d08f84f2440925da906d62e004,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 8413358676970004197, guid: 3efe59d08f84f2440925da906d62e004,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -562,6 +567,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: e9dd8e233c13b6246b097d265043a23e,
         type: 2}
+    - target: {fileID: 8758126384983690845, guid: 3efe59d08f84f2440925da906d62e004,
+        type: 3}
+      propertyPath: _pickupRange
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3efe59d08f84f2440925da906d62e004, type: 3}
 --- !u!1001 &1088772278
