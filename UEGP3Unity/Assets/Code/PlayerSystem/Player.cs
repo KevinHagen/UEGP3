@@ -20,6 +20,11 @@ namespace UEGP3.PlayerSystem
 			{
 				_playerInventory.ShowInventory();
 			}
+
+			if (Input.GetButtonDown("ItemQuickAccess"))
+			{
+				_playerInventory.UseQuickAccessItem();
+			}
 		}
 
 		private void OnTriggerEnter(Collider other)
