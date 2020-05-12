@@ -137,3 +137,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemToPickup: {fileID: 0}
   _pickupRange: 0.75
+  _pickupSFX: {fileID: 11400000, guid: 95c36172e048ff846a4f1190a6bccd3d, type: 2}
