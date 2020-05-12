@@ -31,6 +31,9 @@ namespace UEGP3.PlayerSystem
 		[Tooltip("A layermask used to exclude/include certain layers from the \"ground\"")] [SerializeField]
 		private LayerMask _groundCheckLayerMask = default;
 
+		// Use formula: Mathf.Sqrt(h * (-2) * g)
+		private float JumpVelocity => Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
+		
 		private bool _isGrounded;
 		private float _currentVerticalVelocity;
 		private float _currentForwardVelocity;
@@ -68,7 +71,7 @@ namespace UEGP3.PlayerSystem
 			_currentVerticalVelocity += Physics.gravity.y * _gravityModifier * Time.deltaTime;
 			
 			// Clamp velocity to reach no more than our defined terminal velocity
-			_currentVerticalVelocity = Mathf.Clamp(_currentVerticalVelocity, -_terminalVelocity, _jumpHeight);
+			_currentVerticalVelocity = Mathf.Clamp(_currentVerticalVelocity, -_terminalVelocity, JumpVelocity);
 
 			// Calculate velocity vector based on gravity and speed
 			// (0, 0, z) -> (0, y, z)
@@ -92,8 +95,7 @@ namespace UEGP3.PlayerSystem
 			// If we are grounded and jump was pressed, jump
 			if (_isGrounded && jumpDown)
 			{
-				// Use formula: Mathf.Sqrt(h * (-2) * g)
-				_currentVerticalVelocity = Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
+				_currentVerticalVelocity = JumpVelocity;
 			}
 		}
 	}
