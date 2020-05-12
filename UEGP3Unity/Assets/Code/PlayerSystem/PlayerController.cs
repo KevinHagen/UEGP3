@@ -39,10 +39,12 @@ namespace UEGP3.PlayerSystem
 		private float _currentForwardVelocity;
 		private float _speedSmoothVelocity;
 		private CharacterController _characterController;
+		private PlayerAnimationHandler _playerAnimationHandler;
 		
 		private void Awake()
 		{
 			_characterController = GetComponent<CharacterController>();
+			_playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
 		}
 
 		private void Update()
@@ -97,6 +99,8 @@ namespace UEGP3.PlayerSystem
 			{
 				_currentVerticalVelocity = JumpVelocity;
 			}
+
+			_playerAnimationHandler.SetMovementSpeed(_currentForwardVelocity);
 		}
 	}
 }

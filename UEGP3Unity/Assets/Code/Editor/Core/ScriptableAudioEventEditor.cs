@@ -77,7 +77,7 @@ namespace UEGP3.Code.Editor.Core
             }
             
             serializedObject.ApplyModifiedProperties();
-            
+
             if (GUILayout.Button("Preview SFX"))
             {
                 scriptableAudioEvent.Play(_previewAudioSource);
