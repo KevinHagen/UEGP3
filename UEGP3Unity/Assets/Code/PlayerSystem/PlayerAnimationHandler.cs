@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace UEGP3.PlayerSystem
 {
+
 	/// <summary>
 	/// Animation handler that observes several player states and translates them into animation states.
 	/// </summary>
@@ -52,6 +53,11 @@ namespace UEGP3.PlayerSystem
 		public void DoJump()
 		{
 			_animator.SetTrigger(Jump);
+		}
+
+		public void ResetJumpTrigger()
+		{
+			_animator.ResetTrigger(Jump);
 		}
 
 		/// <summary>
