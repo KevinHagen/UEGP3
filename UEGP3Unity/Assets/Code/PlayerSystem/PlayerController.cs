@@ -8,6 +8,8 @@ namespace UEGP3.PlayerSystem
 	{
 		[Header("General Settings")] [Tooltip("The speed with which the player moves forward")] [SerializeField]
 		private float _movementSpeed = 10f;
+		[Header("General Settings")] [Tooltip("The speed with which the player moves forward when sprinting")] [SerializeField]
+		private float _sprintSpeed = 10f;
 		[Tooltip("The graphical represenation of the character. It is used for things like rotation")] [SerializeField]
 		private Transform _graphicsObject = null;
 		[Tooltip("Reference to the game camera")] [SerializeField]
@@ -55,6 +57,7 @@ namespace UEGP3.PlayerSystem
 			float horizontalInput = Input.GetAxisRaw("Horizontal");
 			float verticalInput = Input.GetAxisRaw("Vertical");
 			bool jumpDown = Input.GetButtonDown("Jump");
+			bool isSprinting = Input.GetButton("Sprint");
 
 			// Calculate a direction from input data 
 			Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
@@ -77,7 +80,7 @@ namespace UEGP3.PlayerSystem
 
 			// Calculate velocity vector based on gravity and speed
 			// (0, 0, z) -> (0, y, z)
-			float targetSpeed = (_movementSpeed * direction.magnitude);
+			float targetSpeed = (isSprinting ? _sprintSpeed : _movementSpeed) * direction.magnitude;
 			_currentForwardVelocity = Mathf.SmoothDamp(_currentForwardVelocity, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
 			Vector3 velocity = _graphicsObject.forward * _currentForwardVelocity + Vector3.up * _currentVerticalVelocity;
 			
@@ -88,6 +91,7 @@ namespace UEGP3.PlayerSystem
 			
 			// Check if we are grounded, if so reset gravity
 			_isGrounded = Physics.CheckSphere(_groundCheckTransform.position, _groundCheckRadius, _groundCheckLayerMask);
+			_playerAnimationHandler.SetGrounded(_isGrounded);
 			if (_isGrounded)
 			{
 				// Reset current vertical velocity
@@ -97,10 +101,11 @@ namespace UEGP3.PlayerSystem
 			// If we are grounded and jump was pressed, jump
 			if (_isGrounded && jumpDown)
 			{
+				_playerAnimationHandler.DoJump();
 				_currentVerticalVelocity = JumpVelocity;
 			}
 
-			_playerAnimationHandler.SetMovementSpeed(_currentForwardVelocity);
+			_playerAnimationHandler.SetSpeeds(_currentForwardVelocity, _currentVerticalVelocity);
 		}
 	}
 }
