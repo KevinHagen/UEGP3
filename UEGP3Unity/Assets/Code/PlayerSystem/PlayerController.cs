@@ -27,6 +27,10 @@ namespace UEGP3.PlayerSystem
 		private float _jumpHeight = 2;
 		[Tooltip("Distance in m the player moves when dashing")] [SerializeField]
 		private float _dashDistance = 2;
+		[Tooltip("Slider used to influence air control - 0 is no air control, 1 is full control")] 
+		[Range(0, 1)] 
+		[SerializeField]
+		private float _airControl;
 		
 		[Header("Ground Check")] [Tooltip("A transform used to detect the ground")] [SerializeField]
 		private Transform _groundCheckTransform = null;
@@ -73,7 +77,7 @@ namespace UEGP3.PlayerSystem
 			{
 				float lookRotationAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + _cameraTransform.eulerAngles.y;
 				Quaternion targetRotation = Quaternion.Euler(0, lookRotationAngle, 0);
-				_graphicsObject.rotation = Quaternion.Slerp(_graphicsObject.rotation, targetRotation, _turnSmoothTime);
+				_graphicsObject.rotation = Quaternion.Slerp(_graphicsObject.rotation, targetRotation, GetSmoothTimeAfterAirControl(_turnSmoothTime, false));
 			}
 
 			// Calculate velocity based on gravity formula: delta-y = 1/2 * g * t^2
@@ -87,7 +91,7 @@ namespace UEGP3.PlayerSystem
 			// Calculate velocity vector based on gravity and speed
 			// (0, 0, z) -> (0, y, z)
 			float targetSpeed = (isSprinting ? _sprintSpeed : _movementSpeed) * direction.magnitude;
-			_currentForwardVelocity = Mathf.SmoothDamp(_currentForwardVelocity, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
+			_currentForwardVelocity = Mathf.SmoothDamp(_currentForwardVelocity, targetSpeed, ref _speedSmoothVelocity, GetSmoothTimeAfterAirControl(_speedSmoothTime, true));
 			// If dash was pressed, dash. If we don't want to allow dash while air-borne, ask if grounded.
 			if (isDashing)
 			{
@@ -118,6 +122,30 @@ namespace UEGP3.PlayerSystem
 			}
 
 			_playerAnimationHandler.SetSpeeds(_currentForwardVelocity, _currentVerticalVelocity);
+		}
+
+		/// <summary>
+		/// Calculates the smoothTime based on airControl.
+		/// </summary>
+		/// <param name="smoothTime">The initial smoothTIme</param>
+		/// <param name="zeroControlIsMaxValue">If we do not have air control, is the smooth time float.MaxValue or float.MinValue?</param>
+		/// <returns>The smoothTime after regarding air control</returns>
+		private float GetSmoothTimeAfterAirControl(float smoothTime, bool zeroControlIsMaxValue)
+		{
+			// We are grounded, don't modify smoothTime
+			if (_characterController.isGrounded)
+			{
+				return smoothTime;
+			}
+
+			// Avoid divide by 0 exception
+			if (Math.Abs(_airControl) < Mathf.Epsilon)
+			{
+				return zeroControlIsMaxValue ? float.MaxValue : float.MinValue;
+			}
+
+			// smoothTime is influenced by air control
+			return smoothTime / _airControl;
 		}
 	}
 }
