@@ -33,6 +33,8 @@ namespace UEGP3.PlayerSystem
 		[Tooltip("A layermask used to exclude/include certain layers from the \"ground\"")] [SerializeField]
 		private LayerMask _groundCheckLayerMask = default;
 
+		public float CurrentYaw => _graphicsObject.rotation.eulerAngles.y;
+		
 		// Use formula: Mathf.Sqrt(h * (-2) * g)
 		private float JumpVelocity => Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
 		
