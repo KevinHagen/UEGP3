@@ -24,7 +24,9 @@ namespace UEGP3.PlayerSystem
 		[Tooltip("Maximum falling velocity the player can reach")] [Range(1f, 15f)] [SerializeField]
 		private float _terminalVelocity = 10f;
 		[Tooltip("The height in meters the cahracter can jump")] [SerializeField]
-		private float _jumpHeight;
+		private float _jumpHeight = 2;
+		[Tooltip("Distance in m the player moves when dashing")] [SerializeField]
+		private float _dashDistance = 2;
 		
 		[Header("Ground Check")] [Tooltip("A transform used to detect the ground")] [SerializeField]
 		private Transform _groundCheckTransform = null;
@@ -37,6 +39,7 @@ namespace UEGP3.PlayerSystem
 		
 		// Use formula: Mathf.Sqrt(h * (-2) * g)
 		private float JumpVelocity => Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
+		private float DashVelocity => Mathf.Sqrt(_dashDistance * -2 * Physics.gravity.y);
 		
 		private bool _isGrounded;
 		private float _currentVerticalVelocity;
@@ -60,6 +63,7 @@ namespace UEGP3.PlayerSystem
 			float verticalInput = Input.GetAxisRaw("Vertical");
 			bool jumpDown = Input.GetButtonDown("Jump");
 			bool isSprinting = Input.GetButton("Sprint");
+			bool isDashing = Input.GetButtonDown("Dash");
 
 			// Calculate a direction from input data 
 			Vector3 direction = new Vector3(horizontalInput, 0, verticalInput).normalized;
@@ -84,6 +88,12 @@ namespace UEGP3.PlayerSystem
 			// (0, 0, z) -> (0, y, z)
 			float targetSpeed = (isSprinting ? _sprintSpeed : _movementSpeed) * direction.magnitude;
 			_currentForwardVelocity = Mathf.SmoothDamp(_currentForwardVelocity, targetSpeed, ref _speedSmoothVelocity, _speedSmoothTime);
+			// If dash was pressed, dash. If we don't want to allow dash while air-borne, ask if grounded.
+			if (isDashing)
+			{
+				// Either set velocity = DashVelocity or add it. Both gives a nice small dash effect.
+				_currentForwardVelocity += DashVelocity;
+			}
 			Vector3 velocity = _graphicsObject.forward * _currentForwardVelocity + Vector3.up * _currentVerticalVelocity;
 			
 			// Use the direction to move the character controller
