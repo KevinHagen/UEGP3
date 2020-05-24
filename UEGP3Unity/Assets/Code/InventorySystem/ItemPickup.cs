@@ -19,6 +19,9 @@ namespace UEGP3.InventorySystem
 
 		private void Awake()
 		{
+			// Change Mesh Collider based on the set pick up
+			GetComponentInChildren<MeshFilter>().mesh = _itemToPickup.ItemMesh;
+			
 			// Get collider on same object
 			_pickupCollider = GetComponent<SphereCollider>();
 			_audioSource = FindObjectOfType<AudioSource>();

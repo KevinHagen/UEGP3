@@ -17,3 +17,4 @@ MonoBehaviour:
   _itemSprite: {fileID: 0}
   _consumeUponUse: 0
   _isUnique: 1
+  _itemMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}

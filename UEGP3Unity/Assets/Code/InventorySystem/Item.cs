@@ -14,6 +14,8 @@ namespace UEGP3.InventorySystem
 		private bool _consumeUponUse;
 		[Tooltip("A unique item can not be stacked in the players inventory")] [SerializeField]
 		private bool _isUnique;
+		[Tooltip("The mesh used for the item pickup")] [SerializeField]
+		private Mesh _itemMesh;
 		
 		/* // C# Auto-Property
 		public bool ConsumeUponuse { get; set; }
@@ -45,6 +47,7 @@ namespace UEGP3.InventorySystem
 		public bool IsUnique => _isUnique;
 		public bool ConsumeUponUse => _consumeUponUse;
 		public string ItemName => _itemName;
+		public Mesh ItemMesh => _itemMesh;
 
 		/// <summary>
 		/// Uses the item and executes its effect.
