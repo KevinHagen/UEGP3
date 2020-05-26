@@ -360,7 +360,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122559098}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -1021,7 +1021,7 @@ PrefabInstance:
     - target: {fileID: 6346459506547940417, guid: c8c5f6a5eb2576c4a9e021b71867496f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.5088304e-11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6346459506547940417, guid: c8c5f6a5eb2576c4a9e021b71867496f,
         type: 3}
@@ -3413,6 +3413,8 @@ PlayableDirector:
     value: {fileID: 810971555}
   - key: {fileID: 114736597651843412, guid: ba2a16c1b77477248a6838500e0c757d, type: 2}
     value: {fileID: 810971555}
+  - key: {fileID: 114999506433810778, guid: ba2a16c1b77477248a6838500e0c757d, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - e95d2e407a301484381442a16bd46077: {fileID: 0}

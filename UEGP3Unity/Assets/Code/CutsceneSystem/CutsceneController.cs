@@ -20,6 +20,8 @@ namespace UEGP3.CutsceneSystem
 		private bool _isActive;
 		// store paused state
 		private bool _isPaused;
+		// playback speed is required for pause/resume
+		private float _defaultPlaybackSpeed;
 
 		private void Awake()
 		{
@@ -77,7 +79,7 @@ namespace UEGP3.CutsceneSystem
 		{
 			_isPaused = true;
 			Time.timeScale = 0f;
-			_playableDirector.Pause();
+			_defaultPlaybackSpeed = _playableDirector.PauseDirector();
 			_pauseScreenCanvasGroup.alpha = 1f;
 			_pauseScreenCanvasGroup.interactable = true;
 			_pauseScreenCanvasGroup.blocksRaycasts = true;
@@ -89,7 +91,7 @@ namespace UEGP3.CutsceneSystem
 		public void ResumeTimeline()
 		{
 			_isPaused = false;
-			_playableDirector.Resume();
+			_playableDirector.ResumeDirector(_defaultPlaybackSpeed);
 			_pauseScreenCanvasGroup.alpha = 0f;
 			_pauseScreenCanvasGroup.interactable = false;
 			_pauseScreenCanvasGroup.blocksRaycasts = false;
