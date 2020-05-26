@@ -7,8 +7,10 @@ namespace UEGP3.CutsceneSystem
 	/// </summary>
 	public class CutsceneTrigger : MonoBehaviour
 	{
-		[Tooltip("The Cutscene supposed to trigger.")] [SerializeField] private CutsceneController _cutsceneController = null;
-		[Tooltip("When set to true, this trigger only works once.")] [SerializeField] private bool _triggerOnlyOnce = true;
+		[Tooltip("The Cutscene supposed to trigger.")] [SerializeField] 
+		private CutsceneController _cutsceneController = null;
+		[Tooltip("When set to true, this trigger only works once.")] [SerializeField] 
+		private bool _triggerOnlyOnce = true;
 
 		// Did this trigger trigger already?
 		private bool _hasTriggered;

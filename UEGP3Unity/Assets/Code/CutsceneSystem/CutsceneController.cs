@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UEGP3.ExtensionMethods;
+using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 namespace UEGP3.CutsceneSystem
 {
-	public class CutsceneController : UnityEngine.MonoBehaviour
+	public class CutsceneController : MonoBehaviour
 	{
 		[Tooltip("The playable director used to play the TimelineAsset")] [SerializeField]
 		private PlayableDirector _playableDirector = default;
@@ -24,6 +27,7 @@ namespace UEGP3.CutsceneSystem
 			if (_playableDirector.playOnAwake)
 			{
 				_isActive = true;
+				_playableDirector.stopped += (pd) => _isActive = false;
 			}
 		}
 
