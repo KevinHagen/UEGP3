@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 494a21e1ab044eab9e4e51142adaba5d, type: 3}
-  m_Name: SmallHealthPotion
+  m_Name: SpeedPotion
   m_EditorClassIdentifier: 
-  _itemName: Small Health Potion
-  _description: Restores a small amount of HP
-  _itemSprite: {fileID: 0}
+  _itemName: Speed Potion
+  _description: Become Super Fast!
+  _itemSprite: {fileID: 21300000, guid: e420c5bc93cb2604695a893500c897e3, type: 3}
   _consumeUponUse: 1
   _isUnique: 0
   _itemMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  _itemType: {fileID: 11400000, guid: 54d10352911fe2a44a1a4278ed71a578, type: 2}
   _restoredHealth: 5

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UEGP3.InventorySystem.UI;
 using UnityEngine;
 
 namespace UEGP3.InventorySystem
@@ -6,18 +7,70 @@ namespace UEGP3.InventorySystem
 	[CreateAssetMenu(menuName = "UEGP3/Inventory System/New Inventory", fileName = "New Inventory")]
 	public class Inventory : ScriptableObject
 	{
-		[Tooltip("Maximum amount of items that can be stored in the inventory")]
-		[SerializeField]
-		private int _maximumSize = 5;
+		[Tooltip("The bags contained in this inventory")] [SerializeField]
+		private List<ItemBag> _bags = default;
+		public List<ItemBag> Bags => _bags;
 		
-		private Dictionary<Item, int> _inventoryItems = new Dictionary<Item, int>();
+		private InventoryUI _inventoryUI = default;
+		private bool _isOpen;
 		private Item _quickAccesItem;
-		
+
 		/// <summary>
-		/// Prints the inventory to the console.
+		/// Creates the runtime inventory with all its required UI.
 		/// </summary>
-		public void ShowInventory()
+		public void Create()
 		{
+			// search for the inventory UI, disable it at first
+			_inventoryUI = FindObjectOfType<InventoryUI>();
+			_inventoryUI.SetInventory(this);
+			_inventoryUI.Hide();
+			_isOpen = false;
+
+			// Add all relevant events
+			foreach (ItemBag itemBag in _bags)
+			{
+				itemBag.SubscribeEvents();
+			}
+			
+			ItemBag.OnItemRemoved += OnItemRemoved;
+		}
+
+		/// <summary>
+		/// Destroy the runtime inventory
+		/// </summary>
+		public void Destroy()
+		{
+			foreach (ItemBag itemBag in _bags)
+			{
+				itemBag.UnsubscribeEvents();
+			}
+			
+			ItemBag.OnItemRemoved -= OnItemRemoved;
+		}
+
+		/// <summary>
+		/// Prints the inventory to the console and opens the UI.
+		/// </summary>
+		public void ToggleInventory()
+		{
+			_isOpen = !_isOpen;
+			if (_isOpen)
+			{
+				// Open the inventory, stop the time and unlock the cursor.
+				Time.timeScale = 0f;
+				Cursor.lockState = CursorLockMode.Confined;
+				Cursor.visible = true;
+				_inventoryUI.Show();
+			}
+			else
+			{
+				// Close the inventory, proceed the time and lock the cursor.
+				Time.timeScale = 1f;
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = false;
+				_inventoryUI.Hide();
+			}
+			
 			Debug.Log(this);
 		}
 		
@@ -29,26 +82,11 @@ namespace UEGP3.InventorySystem
 		public bool TryAddItem(Item item)
 		{
 			bool success = false;
-			// Item is not yet in inventory, add it
-			if (!_inventoryItems.ContainsKey(item))
+			foreach (ItemBag itemBag in _bags)
 			{
-				// only add items if inventory is not full
-				if (_inventoryItems.Count >= _maximumSize)
+				if (itemBag.SupportedItemTypes.Contains(item.ItemType))
 				{
-					return false;
-				}
-
-				_inventoryItems.Add(item, 1);
-				success = true;
-			}
-			// Item is already in inventory, stack it up if possible
-			else
-			{
-				// Only items that are not unique can be stacked
-				if (!item.IsUnique)
-				{
-					_inventoryItems[item]++;
-					success = true;
+					success = itemBag.TryAddItem(item);
 				}
 			}
 
@@ -57,32 +95,8 @@ namespace UEGP3.InventorySystem
 			{
 				AddToQuickAccess(item);
 			}
-			
+
 			return success;
-		}
-
-		public void UseItem(Item item)
-		{
-			// Item can only be used if it is in the inventory
-			if (!_inventoryItems.ContainsKey(item))
-			{
-				return;
-			}
-			
-			// Use the item
-			item.UseItem();
-			
-			// if consumed upon use, decrease count
-			if (item.ConsumeUponUse)
-			{
-				_inventoryItems[item]--;
-			}
-
-			// if no longer in inventory, because count == 0, remove it
-			if (_inventoryItems[item] == 0)
-			{
-				RemoveItem(item);
-			}
 		}
 		
 		public void UseQuickAccessItem()
@@ -93,23 +107,32 @@ namespace UEGP3.InventorySystem
 				return;
 			}
 			
-			// Use item
-			UseItem(_quickAccesItem);
-			
-			// if item is no longer in the inventory, remove from quick access
-			if (!_inventoryItems.ContainsKey(_quickAccesItem))
+			// Find the item in its bag
+			ItemBag bagThatContainsItem = FindBagWithItem(_quickAccesItem);
+			if (bagThatContainsItem == null)
 			{
-				RemoveFromQuickAccess();
+				return;
 			}
+			
+			// Use item
+			bagThatContainsItem.UseItem(_quickAccesItem);
 		}
 
-		/// <summary>
-		/// Removes the given item from the inventory
-		/// </summary>
-		/// <param name="item">The item to be removed</param>
-		private void RemoveItem(Item item)
+		private ItemBag FindBagWithItem(Item itemToSearchFor)
 		{
-			_inventoryItems.Remove(item);
+			ItemBag bagThatContainsItem = null;
+			// Loop over all bags and see if they contain the item we are looking for.
+			// Return the first that has it.
+			foreach (ItemBag itemBag in _bags)
+			{
+				if (itemBag.HasItem(itemToSearchFor))
+				{
+					bagThatContainsItem = itemBag;
+					break;
+				}
+			}
+
+			return bagThatContainsItem;
 		}
 
 		/// <summary>
@@ -129,15 +152,30 @@ namespace UEGP3.InventorySystem
 			_quickAccesItem = null;
 		}
 
+		private void OnItemRemoved(Item item, ItemBag bag)
+		{
+			// if an item was removed and its not null, the bag is not null and the bag is contained in this inventory, proceed
+			if ((item == null) || (bag == null) || !_bags.Contains(bag))
+			{
+				return;
+			}
+			
+			// if the item in the quick access is the removed one, remove it from the quick access
+			if (_quickAccesItem.Equals(item))
+			{
+				RemoveFromQuickAccess();
+			}
+		}
+
 		public override string ToString()
 		{
 			// "String-Interpolation": $ before a string "" allows us to use variables in {} 
 			// inventory = "Inventory " + name + " contains:\r\n" is the same as the line below, but nicer! :) 
 			string inventory = $"Inventory {name} contains:\r\n";
 
-			foreach (KeyValuePair<Item,int> inventoryItem in _inventoryItems)
+			foreach (ItemBag itemBag in _bags)
 			{
-				inventory += $"[{inventoryItem.Key.ItemName} - {inventoryItem.Value}]\r\n";
+				inventory += $"{itemBag.ToString()}\r\n";
 			}
 			
 			return inventory;

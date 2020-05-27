@@ -4,6 +4,12 @@ namespace UEGP3.InventorySystem
 {
 	public abstract class Item : ScriptableObject
 	{
+		public delegate void UseItemAction(Item item);
+		/// <summary>
+		/// Event fired when an item gets used.
+		/// </summary>
+		public static event UseItemAction OnItemUsed;
+		
 		[Tooltip("The name of the item")] [SerializeField]
 		protected string _itemName;
 		[Tooltip("Short description of the item, shown to the player")] [SerializeField]
@@ -16,6 +22,8 @@ namespace UEGP3.InventorySystem
 		private bool _isUnique;
 		[Tooltip("The mesh used for the item pickup")] [SerializeField]
 		private Mesh _itemMesh;
+		[Tooltip("The type of the item")] [SerializeField]
+		private ItemType _itemType;
 		
 		/* // C# Auto-Property
 		public bool ConsumeUponuse { get; set; }
@@ -47,11 +55,17 @@ namespace UEGP3.InventorySystem
 		public bool IsUnique => _isUnique;
 		public bool ConsumeUponUse => _consumeUponUse;
 		public string ItemName => _itemName;
+		public Sprite ItemSprite => _itemSprite;
 		public Mesh ItemMesh => _itemMesh;
+		public ItemType ItemType => _itemType;
+		public string ItemDescription => _description;
 
 		/// <summary>
 		/// Uses the item and executes its effect.
 		/// </summary>
-		public abstract void UseItem();
+		public virtual void UseItem()
+		{
+			OnItemUsed?.Invoke(this);
+		}
 	}
 }
