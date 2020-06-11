@@ -19,10 +19,14 @@ namespace UEGP3.Core
 		private bool _randomizeVolume;
 		[Tooltip("The fixed volume at which the sfx will be played")] [SerializeField] 
 		private float _volume;
-		[Tooltip("Minimum volume when using a random value")] [SerializeField] 
-		private float _minVolume;
-		[Tooltip("Maximum volume when using a random value")] [SerializeField] 
-		private float _maxVolume;
+		[Tooltip("Minimum/maximum volume when using a random value")] [SerializeField] [MinMaxFloat(0f, 5f)]
+		private MinMaxFloat _minMaxVolume = default;
+		
+		// Old, replaced by the above minmaxfloat
+		// [Tooltip("Minimum volume when using a random value")] [SerializeField] 
+		// private float _minVolume;
+		// [Tooltip("Maximum volume when using a random value")] [SerializeField] 
+		// private float _maxVolume;
 		
 		[Header("Pitch")]
 		[Tooltip("Toggles whether the sfx is played at a fixed or a random range pitch")] 
@@ -30,10 +34,14 @@ namespace UEGP3.Core
 		private bool _randomizePitch;
 		[Tooltip("The fixed pitch at which the sfx will be played")] [SerializeField] 
 		private float _pitch;
-		[Tooltip("Minimum pitch when using a random value")] [SerializeField] 
-		private float _minPitch;
-		[Tooltip("Maximum pitch when using a random value")] [SerializeField] 
-		private float _maxPitch;
+		[Tooltip("Minimum/maximum pitch when using a random value")] [SerializeField] [MinMaxFloat(-2f, 2f)]
+		private MinMaxFloat _minMaxPitch = default;
+		
+		// Old, replaced by the above minmaxfloat
+		// [Tooltip("Minimum pitch when using a random value")] [SerializeField] 
+		// private float _minPitch;
+		// [Tooltip("Maximum pitch when using a random value")] [SerializeField] 
+		// private float _maxPitch;
 		
 		public bool RandomizeVolume => _randomizeVolume;
 		public bool RandomizePitch => _randomizePitch;
@@ -52,9 +60,9 @@ namespace UEGP3.Core
 			// pick a random audio clip from the array
 			source.clip = _clips[Random.Range(0, _clips.Length)];
 			// Use either fixed or randomized volume
-			source.volume = _randomizeVolume ? Random.Range(_minVolume, _maxVolume) : _volume;
+			source.volume = _randomizeVolume ? Random.Range(_minMaxVolume.MinValue, _minMaxVolume.MaxValue) : _volume;
 			// Use either fixed or randomized pitch
-			source.pitch = _randomizePitch ? Random.Range(_minPitch, _maxPitch) : _pitch;
+			source.pitch = _randomizePitch ? Random.Range(_minMaxPitch.MinValue, _minMaxPitch.MaxValue) : _pitch;
 			
 			source.Play();
 		}

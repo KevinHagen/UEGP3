@@ -14,13 +14,19 @@ namespace UEGP3.Code.Editor.Core
 
         private SerializedProperty _randomizeVolumeProperty;
         private SerializedProperty _volumeProperty;
-        private SerializedProperty _minVolumeProperty;
-        private SerializedProperty _maxVolumeProperty;
+        private SerializedProperty _minMaxVolumeProperty;
+        
+        // Old, replaced by above property
+        // private SerializedProperty _minVolumeProperty;
+        // private SerializedProperty _maxVolumeProperty;
         
         private SerializedProperty _randomizePitchProperty;
         private SerializedProperty _pitchProperty;
-        private SerializedProperty _minPitchProperty;
-        private SerializedProperty _maxPitchProperty;
+        private SerializedProperty _minMaxPitchProperty;
+        
+        // Old, replaced by above property
+        // private SerializedProperty _minPitchProperty;
+        // private SerializedProperty _maxPitchProperty;
         
         private void OnEnable()
         {
@@ -31,13 +37,19 @@ namespace UEGP3.Code.Editor.Core
 
             _randomizeVolumeProperty = serializedObject.FindProperty("_randomizeVolume");
             _volumeProperty = serializedObject.FindProperty("_volume");
-            _minVolumeProperty = serializedObject.FindProperty("_minVolume");
-            _maxVolumeProperty = serializedObject.FindProperty("_maxVolume");
+            _minMaxVolumeProperty = serializedObject.FindProperty("_minMaxVolume");
 
+            // Old, replaced by above property
+            // _minVolumeProperty = serializedObject.FindProperty("_minVolume");
+            // _maxVolumeProperty = serializedObject.FindProperty("_maxVolume");
+            
             _randomizePitchProperty = serializedObject.FindProperty("_randomizePitch");
             _pitchProperty = serializedObject.FindProperty("_pitch");
-            _minPitchProperty = serializedObject.FindProperty("_minPitch");
-            _maxPitchProperty = serializedObject.FindProperty("_maxPitch");
+            _minMaxPitchProperty = serializedObject.FindProperty("_minMaxPitch");
+            
+            // Old, replaced by above property
+            // _minPitchProperty = serializedObject.FindProperty("_minPitch");
+            // _maxPitchProperty = serializedObject.FindProperty("_maxPitch");
         }
 
         private void OnDisable()
@@ -57,8 +69,11 @@ namespace UEGP3.Code.Editor.Core
             EditorGUILayout.PropertyField(_randomizeVolumeProperty);
             if (scriptableAudioEvent.RandomizeVolume)
             {
-                EditorGUILayout.PropertyField(_minVolumeProperty);
-                EditorGUILayout.PropertyField(_maxVolumeProperty);
+                EditorGUILayout.PropertyField(_minMaxVolumeProperty, true);
+				
+                // Old, replaced by above property
+                // EditorGUILayout.PropertyField(_minVolumeProperty);
+                // EditorGUILayout.PropertyField(_maxVolumeProperty);
             }
             else
             {
@@ -68,8 +83,11 @@ namespace UEGP3.Code.Editor.Core
             EditorGUILayout.PropertyField(_randomizePitchProperty);
             if (scriptableAudioEvent.RandomizePitch)
             {
-                EditorGUILayout.PropertyField(_minPitchProperty);
-                EditorGUILayout.PropertyField(_maxPitchProperty);
+                EditorGUILayout.PropertyField(_minMaxPitchProperty, true);
+				
+                // Old, replaced by above property
+                // EditorGUILayout.PropertyField(_minPitchProperty);
+                // EditorGUILayout.PropertyField(_maxPitchProperty);
             }
             else
             {
