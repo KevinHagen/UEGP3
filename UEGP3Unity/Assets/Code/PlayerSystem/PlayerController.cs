@@ -1,9 +1,10 @@
 ﻿using System;
+using UEGP3.Core;
 using UnityEngine;
 
 namespace UEGP3.PlayerSystem
 {
-	[RequireComponent(typeof(CharacterController))]
+	[RequireComponent(typeof(CharacterController), typeof(AudioSource))]
 	public class PlayerController : MonoBehaviour
 	{
 		[Header("General Settings")] [Tooltip("The speed with which the player moves forward")] [SerializeField]
@@ -39,16 +40,23 @@ namespace UEGP3.PlayerSystem
 		[Tooltip("A layermask used to exclude/include certain layers from the \"ground\"")] [SerializeField]
 		private LayerMask _groundCheckLayerMask = default;
 
+		[SerializeField] [Tooltip("Audio Event that is played when the player jumps")]
+		private ScriptableAudioEvent _jumpAudioEvent = default;
+		[SerializeField] [Tooltip("Audio Event that is played when the player lands")]
+		private ScriptableAudioEvent _landAudioEvent = default;
+		
 		public float CurrentYaw => _graphicsObject.rotation.eulerAngles.y;
 		
 		// Use formula: Mathf.Sqrt(h * (-2) * g)
 		private float JumpVelocity => Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
 		private float DashVelocity => Mathf.Sqrt(_dashDistance * -2 * Physics.gravity.y);
 		
+		private bool _wasGroundedLastFrame;
 		private bool _isGrounded;
 		private float _currentVerticalVelocity;
 		private float _currentForwardVelocity;
 		private float _speedSmoothVelocity;
+		private AudioSource _audioSource;
 		private CharacterController _characterController;
 		private PlayerAnimationHandler _playerAnimationHandler;
 		
@@ -56,6 +64,11 @@ namespace UEGP3.PlayerSystem
 		{
 			_characterController = GetComponent<CharacterController>();
 			_playerAnimationHandler = GetComponent<PlayerAnimationHandler>();
+			_audioSource = GetComponent<AudioSource>();
+			
+			// Initial ground check to avoid sound in first frame 
+			_isGrounded = Physics.CheckSphere(_groundCheckTransform.position, _groundCheckRadius, _groundCheckLayerMask);
+			_wasGroundedLastFrame = _isGrounded;
 		}
 
 		private void Update()
@@ -114,6 +127,17 @@ namespace UEGP3.PlayerSystem
 				_currentVerticalVelocity = 0f;
 			}
 
+			if (_wasGroundedLastFrame && !_isGrounded)
+			{
+				// Play jump sound
+				_jumpAudioEvent.Play(_audioSource);
+			}
+			else if (!_wasGroundedLastFrame && _isGrounded)
+			{
+				// Play landing sound
+				_landAudioEvent.Play(_audioSource);
+			}
+			
 			// If we are grounded and jump was pressed, jump
 			if (_isGrounded && jumpDown)
 			{
@@ -122,6 +146,7 @@ namespace UEGP3.PlayerSystem
 			}
 
 			_playerAnimationHandler.SetSpeeds(_currentForwardVelocity, _currentVerticalVelocity);
+			_wasGroundedLastFrame = _isGrounded;
 		}
 
 		/// <summary>

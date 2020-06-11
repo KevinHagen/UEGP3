@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05afd142c2754e95af5861804a5e2f60, type: 3}
-  m_Name: ItemPickupSFX
+  m_Name: Land
   m_EditorClassIdentifier: 
   _clips:
-  - {fileID: 8300000, guid: a6a543747dc847d4f9da2248c9eb21c2, type: 3}
-  - {fileID: 8300000, guid: ce95c727e730d2e4696990d458f6e662, type: 3}
-  - {fileID: 8300000, guid: c7c558cf6e175744ab1509a881a8f9c6, type: 3}
-  _randomizeVolume: 0
-  _volume: 0.14
+  - {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  _randomizeVolume: 1
+  _volume: 0
   _minMaxVolume:
-    MinValue: 0
-    MaxValue: 0
-  _randomizePitch: 0
-  _pitch: 0.47
+    MinValue: 0.041527282
+    MaxValue: 0.1654891
+  _randomizePitch: 1
+  _pitch: 0
   _minMaxPitch:
-    MinValue: 0
-    MaxValue: 0
+    MinValue: 0.68104625
+    MaxValue: 1.0281394

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UEGP3.Core;
+using UnityEngine;
 
 namespace UEGP3.InventorySystem
 {
@@ -24,6 +25,8 @@ namespace UEGP3.InventorySystem
 		private Mesh _itemMesh;
 		[Tooltip("The type of the item")] [SerializeField]
 		private ItemType _itemType;
+		[SerializeField] [Tooltip("Audio Event played when the item is used")]
+		private ScriptableAudioEvent useUseAudioEvent;
 		
 		/* // C# Auto-Property
 		public bool ConsumeUponuse { get; set; }
@@ -59,7 +62,8 @@ namespace UEGP3.InventorySystem
 		public Mesh ItemMesh => _itemMesh;
 		public ItemType ItemType => _itemType;
 		public string ItemDescription => _description;
-
+		public ScriptableAudioEvent UseAudioEvent => useUseAudioEvent;
+		
 		/// <summary>
 		/// Uses the item and executes its effect.
 		/// </summary>
