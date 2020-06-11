@@ -12,6 +12,9 @@ namespace UEGP3.PlayerSystem
 		[Tooltip("Inventory to be used for the player")] [SerializeField] 
 		private Inventory _playerInventory;
 
+		[SerializeField] [Tooltip("Reference to the player controller")]
+		private PlayerController _playerController;
+
 		private void Awake()
 		{
 			// Create inventory
@@ -26,6 +29,12 @@ namespace UEGP3.PlayerSystem
 
 		private void Update()
 		{
+			// Do not take any input into account, if input is blocked
+			if (_playerController.BlockInput)
+			{
+				return;
+			}
+			
 			// Show Inventory if button is pressed
 			if (Input.GetButtonDown("Inventory"))
 			{

@@ -14,6 +14,7 @@ namespace UEGP3.CameraSystem
 		[SerializeField]
 		private Transform _cameraPivot;
 		[SerializeField] private PlayerController _playerController;
+		
 
 		[Header("Camera Speed Settings")]
 		[Tooltip("The speed the camera uses to rotate around the x-axis")]
@@ -97,8 +98,8 @@ namespace UEGP3.CameraSystem
 			// Check if the cursor was enabled/disabled in the inspector
 			EditorCheckLockCursor();
 #endif
-			// Do not take any input into account, if camera is currently resetting
-			if (_isResetting)
+			// Do not take any input into account, if camera is currently resetting or input is blocked
+			if (_isResetting || _playerController.BlockInput)
 			{
 				return;
 			}

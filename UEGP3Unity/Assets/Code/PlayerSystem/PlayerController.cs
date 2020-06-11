@@ -46,6 +46,7 @@ namespace UEGP3.PlayerSystem
 		private ScriptableAudioEvent _landAudioEvent = default;
 		
 		public float CurrentYaw => _graphicsObject.rotation.eulerAngles.y;
+		public bool BlockInput { get; set; }
 		
 		// Use formula: Mathf.Sqrt(h * (-2) * g)
 		private float JumpVelocity => Mathf.Sqrt(_jumpHeight * -2 * Physics.gravity.y);
@@ -72,7 +73,13 @@ namespace UEGP3.PlayerSystem
 		}
 
 		private void Update()
-		{
+		{			
+			// Do not take any input into account, if input is blocked
+			if (BlockInput)
+			{
+				return;
+			}
+			
 			// Fetch inputs
 			// GetAxisRaw : -1, +1 (0) 
 			// GetAxis: [-1, +1]
