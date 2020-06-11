@@ -15,6 +15,8 @@ namespace UEGP3.CutsceneSystem
 		private TimelineAsset _timelineAsset = default;
 		[Tooltip("A Pause UI shown to the user when the Timeline Instance is being paused")] [SerializeField]
 		private CanvasGroup _pauseScreenCanvasGroup = default;
+		[SerializeField] [Tooltip("Specifies what needs to be reset on skip")]
+		private TimelineResetHelper _timelineResetHelper = default;
 
 		// is this controller currently active?
 		private bool _isActive;
@@ -104,6 +106,7 @@ namespace UEGP3.CutsceneSystem
 		public void Skip()
 		{
 			_playableDirector.time = _playableDirector.duration;
+			_timelineResetHelper.CleanupForPostPlaybackState();
 			_playableDirector.Stop();
 		}
 	}
