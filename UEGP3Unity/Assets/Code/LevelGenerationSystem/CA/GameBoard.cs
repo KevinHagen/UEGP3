@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UEGP3.LevelGenerationSystem.CA
 {
@@ -39,11 +38,17 @@ namespace UEGP3.LevelGenerationSystem.CA
 				}
 			}
 			
+			// Example usage of jagged arrays
 			// _otherTiles = new SpriteRenderer[5][];
 			// _otherTiles[1] = new SpriteRenderer[3];
 			// _otherTiles[2] = new SpriteRenderer[10];
 		}
 
+		/// <summary>
+		/// Takes a configuration of the map and plots the data onto the game board.
+		/// Ground tiles are shown white, wall tiles are shown black.
+		/// </summary>
+		/// <param name="tileData">The underlying data of the map.</param>
 		public void PlotData(bool[,] tileData)
 		{
 			for (int x = 0; x < _width; x++)

@@ -274,7 +274,9 @@ MonoBehaviour:
   _seed: 0
   _startAliveChance: 0.5
   _gameBoard: {fileID: 796475901}
-  _generations: 5
+  _generations: 8
+  _animate: 0
+  _timeBetweenGenerations: 0
 --- !u!4 &2051803856
 Transform:
   m_ObjectHideFlags: 0
