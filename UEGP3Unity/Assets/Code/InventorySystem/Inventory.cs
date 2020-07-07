@@ -9,8 +9,7 @@ namespace UEGP3.InventorySystem
 	{
 		[Tooltip("The bags contained in this inventory")] [SerializeField]
 		private List<ItemBag> _bags = default;
-		public List<ItemBag> Bags => _bags;
-		
+		public List<ItemBag> Bags { get => _bags; set => _bags = value; }
 		private InventoryUI _inventoryUI = default;
 		private bool _isOpen;
 		private Item _quickAccesItem;

@@ -60,7 +60,7 @@ namespace UEGP3.InventorySystem
 		public string ItemName => _itemName;
 		public Sprite ItemSprite => _itemSprite;
 		public Mesh ItemMesh => _itemMesh;
-		public ItemType ItemType => _itemType;
+		public ItemType ItemType { get => _itemType; set => _itemType = value; }
 		public string ItemDescription => _description;
 		public ScriptableAudioEvent UseAudioEvent => useUseAudioEvent;
 		

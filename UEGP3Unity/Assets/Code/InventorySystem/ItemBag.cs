@@ -35,6 +35,7 @@ namespace UEGP3.InventorySystem
 		
 		// Dictionary used to store items in this bag
 		private Dictionary<Item, int> _inventoryItems = new Dictionary<Item, int>();
+		public Dictionary<Item, int> InventoryItems => _inventoryItems;
 
 		/// <summary>
 		/// Subscribes relevant events for the item bag
